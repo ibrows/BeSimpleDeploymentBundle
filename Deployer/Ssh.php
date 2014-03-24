@@ -132,6 +132,13 @@ class Ssh
             $privkey    = @$connection['privkey_file'] ?: @$this->config['privkey_file'];
             $passphrase = @$connection['passphrase'] ?: @$this->config['passphrase'];
 
+            $co = new ConsoleOutput();
+            $helper =  new DialogHelper();
+            $helper->setInputStream($this->stdin);
+            if(!$passphrase){
+                $passphrase = $helper->askHiddenResponse($co,'passphrase?');
+            }
+            
             if(!ssh2_auth_pubkey_file($this->session, $username, $pubkey, $privkey, $passphrase)){
                 throw new \InvalidArgumentException(sprintf('SSH authentication failed for user "%s" with public key "%s"', $username, $pubkey));
             }
