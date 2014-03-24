@@ -2,6 +2,8 @@
 
 namespace BeSimple\DeploymentBundle\Deployer;
 
+use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use BeSimple\DeploymentBundle\Event\CommandEvent;
 use BeSimple\DeploymentBundle\Event\FeedbackEvent;
@@ -135,10 +137,16 @@ class Ssh
             $co = new ConsoleOutput();
             $helper =  new DialogHelper();
             $helper->setInputStream($this->stdin);
+            if(!$pubkey){
+                $pubkey = $helper->ask($co,'pubkey_file?');
+            }
+            if(!$privkey){
+                $privkey = $helper->ask($co,'privkey_file?');
+            }
             if(!$passphrase){
                 $passphrase = $helper->askHiddenResponse($co,'passphrase?');
             }
-            
+
             if(!ssh2_auth_pubkey_file($this->session, $username, $pubkey, $privkey, $passphrase)){
                 throw new \InvalidArgumentException(sprintf('SSH authentication failed for user "%s" with public key "%s"', $username, $pubkey));
             }
