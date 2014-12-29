@@ -2,7 +2,7 @@
 
 namespace BeSimple\DeploymentBundle\Deployer;
 
-use Sensio\Bundle\GeneratorBundle\Command\Helper\DialogHelper;
+use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use BeSimple\DeploymentBundle\Event\CommandEvent;
